@@ -11,7 +11,7 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const portfolioData = fs.readFileSync("portfolio_data.txt", "utf8");
+const portfolioData = fs.readFileSync(process.cwd() + "/portfolio_data.txt", "utf8");
 
 // conversation memory
 let conversationHistory = [];
