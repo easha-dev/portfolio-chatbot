@@ -124,7 +124,7 @@ async function askQuestion(){
   messages.appendChild(typing);
   messages.scrollTop = messages.scrollHeight;
 
-  const res = await fetch("/ask",{
+  const res = await fetch("/api/ask",{
     method:"POST",
     headers:{
       "Content-Type":"application/json"
