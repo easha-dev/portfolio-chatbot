@@ -1,28 +1,66 @@
 require("dotenv").config();
+
 const express = require("express");
 const OpenAI = require("openai");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
+
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
+
+/* -------------------------
+HOMEPAGE ROUTE
+------------------------- */
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+/* -------------------------
+OPENAI
+------------------------- */
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const portfolioData = fs.readFileSync(process.cwd() + "/portfolio_data.txt", "utf8");
+/* -------------------------
+LOAD PORTFOLIO DATA
+------------------------- */
 
-// conversation memory
+const portfolioData = fs.readFileSync(
+  path.join(__dirname, "portfolio_data.txt"),
+  "utf8"
+);
+
+/* -------------------------
+CONVERSATION MEMORY
+------------------------- */
+
 let conversationHistory = [];
 
-// API endpoint
+/* -------------------------
+API ENDPOINT
+------------------------- */
+
 app.post("/ask", async (req, res) => {
 
   const question = req.body.question;
 
+  if (!question) {
+    return res.status(400).json({
+      answer: "Please ask a question.",
+      suggestions: []
+    });
+  }
+
   // log questions
-  fs.appendFileSync("questions_log.txt", question + "\n");
+  fs.appendFileSync(
+    path.join(__dirname, "questions_log.txt"),
+    question + "\n"
+  );
 
   // store user message
   conversationHistory.push({
@@ -30,7 +68,7 @@ app.post("/ask", async (req, res) => {
     content: question
   });
 
-  // limit conversation memory
+  // limit memory
   if (conversationHistory.length > 10) {
     conversationHistory = conversationHistory.slice(-10);
   }
@@ -39,9 +77,9 @@ app.post("/ask", async (req, res) => {
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
-    
+
       response_format: { type: "json_object" },
-    
+
       messages: [
         {
           role: "system",
@@ -93,7 +131,7 @@ ${portfolioData}
         },
 
         ...conversationHistory
-      ],
+      ]
     });
 
     const aiRaw = response.choices[0].message.content;
@@ -103,7 +141,6 @@ ${portfolioData}
 
     try {
 
-      // remove ```json wrappers if the model adds them
       const aiData = JSON.parse(aiRaw);
 
       answer = aiData.message;
@@ -123,7 +160,7 @@ ${portfolioData}
 
     }
 
-    // ensure suggestions always exist
+    // ensure suggestions exist
     if (!suggestions || suggestions.length === 0) {
       suggestions = [
         "Tell me about Proact",
@@ -132,7 +169,10 @@ ${portfolioData}
       ];
     }
 
-    // attach project links automatically
+    /* -------------------------
+    AUTO PROJECT LINKS
+    ------------------------- */
+
     const lowerAnswer = answer.toLowerCase();
 
     if (!lowerAnswer.includes("http")) {
@@ -182,5 +222,16 @@ ${portfolioData}
   }
 
 });
+
+/* -------------------------
+LOCAL SERVER (ignored by Vercel)
+------------------------- */
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log("Server running on port " + PORT);
+  });
+}
 
 module.exports = app;
