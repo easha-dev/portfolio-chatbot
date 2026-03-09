@@ -56,11 +56,8 @@ app.post("/ask", async (req, res) => {
     });
   }
 
-  // log questions
-  fs.appendFileSync(
-    path.join(__dirname, "questions_log.txt"),
-    question + "\n"
-  );
+  // logging disabled for Vercel
+console.log("Question:", question);
 
   // store user message
   conversationHistory.push({
