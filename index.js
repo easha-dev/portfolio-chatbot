@@ -11,11 +11,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 /* -------------------------
-HOMEPAGE ROUTE
+HOMEPAGE ROUTE (FIXED)
 ------------------------- */
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.resolve("./public/index.html"));
 });
 
 /* -------------------------
@@ -160,7 +160,6 @@ ${portfolioData}
 
     }
 
-    // ensure suggestions exist
     if (!suggestions || suggestions.length === 0) {
       suggestions = [
         "Tell me about Proact",
@@ -195,7 +194,6 @@ ${portfolioData}
 
     }
 
-    // store assistant reply
     conversationHistory.push({
       role: "assistant",
       content: answer
