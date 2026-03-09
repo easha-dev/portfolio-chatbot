@@ -184,4 +184,3 @@ ${portfolioData}
 });
 
 module.exports = app;
-});
