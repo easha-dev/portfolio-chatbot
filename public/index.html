@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Easha AI Chat</title>
+
+<title>Easha Portfolio Assistant</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-/* FLOATING BUTTON */
+/* FLOAT BUTTON */
 
 #chat-toggle{
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 24px;
+  left: 24px;
   background: black;
   color: white;
   border: none;
@@ -23,138 +25,153 @@ body{
   border-radius: 30px;
   cursor: pointer;
   font-size: 14px;
-  z-index: 999;
+  z-index:9999;
 }
+
 
 /* CHAT WINDOW */
 
 #chat-window{
   position: fixed;
   bottom: 80px;
-  left: 20px;
-  width: 340px;
-  height: 480px;
+  left: 24px;
+  width: 360px;
+  height: 500px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
   display: none;
   flex-direction: column;
   overflow: hidden;
-  z-index: 999;
+  z-index:9999;
 }
+
 
 /* HEADER */
 
 #chat-header{
-  padding: 12px 16px;
-  background: black;
-  color: white;
-  font-weight: bold;
+  padding:16px;
+  border-bottom:1px solid #eee;
+  font-weight:600;
 }
 
-/* MESSAGES */
+
+/* MESSAGES AREA */
 
 #chat-messages{
-  flex: 1;
-  padding: 14px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex:1;
+  padding:16px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
+
 
 /* MESSAGE ROW */
 
 .message{
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  max-width: 100%;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
 }
+
 
 /* BOT */
 
-.bot{
-  justify-content: flex-start;
+.message.bot{
+  justify-content:flex-start;
 }
 
-.bot .bubble{
-  background: #f1f1f1;
-}
 
 /* USER */
 
-.user{
-  justify-content: flex-end;
+.message.user{
+  justify-content:flex-end;
 }
 
-.user .bubble{
-  background: black;
-  color: white;
-}
 
-/* BUBBLE */
+/* MESSAGE BUBBLE */
 
 .bubble{
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  max-width: 70%;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:14px;
+  max-width:75%;
+  line-height:1.4;
 }
+
+
+/* BOT BUBBLE */
+
+.bot .bubble{
+  background:#f4f4f4;
+  color:#111;
+}
+
+
+/* USER BUBBLE */
+
+.user .bubble{
+  background:black;
+  color:white;
+}
+
 
 /* AVATAR */
 
 .avatar{
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: black;
-  color: white;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:black;
+  color:white;
+  font-size:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
 }
 
-/* SUGGESTIONS */
+
+/* PROMPTS */
 
 #suggested-prompts{
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  border-top: 1px solid #eee;
+  padding:10px;
+  border-top:1px solid #eee;
 }
 
 .suggest-btn{
-  padding: 6px 10px;
-  border-radius: 16px;
-  border: 1px solid #ddd;
-  background: white;
-  cursor: pointer;
-  font-size: 12px;
+  margin:4px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  background:#f7f7f7;
+  cursor:pointer;
+  font-size:12px;
 }
 
-/* INPUT AREA */
+
+/* INPUT */
 
 #chat-input{
-  display: flex;
-  border-top: 1px solid #eee;
+  display:flex;
+  border-top:1px solid #eee;
 }
 
 #question{
-  flex: 1;
-  padding: 10px;
-  border: none;
-  outline: none;
+  flex:1;
+  border:none;
+  padding:12px;
+  font-size:14px;
 }
 
 #send{
-  border: none;
-  background: black;
-  color: white;
-  padding: 0 16px;
-  cursor: pointer;
+  border:none;
+  padding:12px 16px;
+  background:black;
+  color:white;
+  cursor:pointer;
 }
 
 </style>
@@ -163,7 +180,9 @@ body{
 
 <body>
 
-<button id="chat-toggle">Chat</button>
+
+<button id="chat-toggle">💬 Ask Easha</button>
+
 
 <div id="chat-window">
 
@@ -183,58 +202,7 @@ Ask Easha about her work
 </div>
 
 
-
 <script src="script.js"></script>
-
-
-<script>
-
-/* OVERRIDE addMessage TO FIX ALIGNMENT */
-
-const oldAddMessage = addMessage;
-
-addMessage = async function(text, sender){
-
-  const msg = document.createElement("div");
-
-  msg.className = "message " + (sender === "user" ? "user" : "bot");
-
-  if(sender === "user"){
-
-    msg.innerHTML =
-      `<div class="bubble">${text}</div>`;
-
-  } else {
-
-    msg.innerHTML =
-      `<div class="avatar">E</div>
-       <div class="bubble"></div>`;
-
-    const bubble = msg.querySelector(".bubble");
-
-    let i = 0;
-
-    while(i <= text.length){
-
-      const partial = text.slice(0,i);
-
-      bubble.innerHTML = formatAI(partial);
-
-      await new Promise(r => setTimeout(r,15));
-
-      i++;
-
-    }
-
-  }
-
-  messages.appendChild(msg);
-
-  messages.scrollTop = messages.scrollHeight;
-
-}
-
-</script>
 
 </body>
 </html>
