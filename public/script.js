@@ -36,13 +36,13 @@ ADD MESSAGE
 async function addMessage(text, sender){
 
   const msg = document.createElement("div");
-  msg.className = "message";
+   msg.className = "message " + sender;
 
   messages.appendChild(msg);
 
   if(sender === "user"){
 
-    msg.innerHTML = "<strong>You:</strong> " + text;
+    msg.innerHTML = '<div class="bubble">' + text + '</div>';
 
   } else {
 
@@ -53,7 +53,8 @@ async function addMessage(text, sender){
       const partial = text.slice(0,i);
 
       msg.innerHTML =
-        "<strong>Easha:</strong> " + formatAI(partial);
+  '<div class="avatar">E</div>' +
+  '<div class="bubble">' + formatAI(partial) + '</div>';
 
       messages.scrollTop = messages.scrollHeight;
 
