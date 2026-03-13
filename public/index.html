@@ -10,42 +10,19 @@
 
 body{
   font-family: 'Inter', sans-serif;
+  margin:0;
 }
-
-/* FLOAT BUTTON */
-
-#chat-toggle{
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  background: black;
-  color: white;
-  border: none;
-  padding: 14px 18px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 14px;
-  z-index:9999;
-}
-
 
 /* CHAT WINDOW */
 
 #chat-window{
-  position: fixed;
-  bottom: 80px;
-  left: 24px;
-  width: 360px;
-  height: 500px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index:9999;
+  width:100%;
+  height:100vh;
+  background:white;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
-
 
 /* HEADER */
 
@@ -54,7 +31,6 @@ body{
   border-bottom:1px solid #eee;
   font-weight:600;
 }
-
 
 /* MESSAGES AREA */
 
@@ -67,7 +43,6 @@ body{
   gap:12px;
 }
 
-
 /* MESSAGE ROW */
 
 .message{
@@ -76,20 +51,17 @@ body{
   gap:10px;
 }
 
-
 /* BOT */
 
 .message.bot{
   justify-content:flex-start;
 }
 
-
 /* USER */
 
 .message.user{
   justify-content:flex-end;
 }
-
 
 /* MESSAGE BUBBLE */
 
@@ -101,7 +73,6 @@ body{
   line-height:1.4;
 }
 
-
 /* BOT BUBBLE */
 
 .bot .bubble{
@@ -109,14 +80,12 @@ body{
   color:#111;
 }
 
-
 /* USER BUBBLE */
 
 .user .bubble{
   background:black;
   color:white;
 }
-
 
 /* AVATAR */
 
@@ -132,7 +101,6 @@ body{
   justify-content:center;
   flex-shrink:0;
 }
-
 
 /* PROMPTS */
 
@@ -150,7 +118,6 @@ body{
   cursor:pointer;
   font-size:12px;
 }
-
 
 /* INPUT */
 
@@ -177,12 +144,7 @@ body{
 </style>
 </head>
 
-
 <body>
-
-
-<button id="chat-toggle">💬 Ask Easha</button>
-
 
 <div id="chat-window">
 
@@ -200,7 +162,6 @@ Ask Easha about her work
 </div>
 
 </div>
-
 
 <script src="script.js"></script>
 
