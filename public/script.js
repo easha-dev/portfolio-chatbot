@@ -1,15 +1,9 @@
-const toggle = document.getElementById("chat-toggle");
 const windowBox = document.getElementById("chat-window");
 
 const input = document.getElementById("question");
 const sendBtn = document.getElementById("send");
 const messages = document.getElementById("chat-messages");
 const suggestionsBox = document.getElementById("suggested-prompts");
-
-toggle.onclick = () => {
-  windowBox.style.display =
-    windowBox.style.display === "flex" ? "none" : "flex";
-};
 
 sendBtn.onclick = askQuestion;
 
@@ -20,7 +14,6 @@ input.addEventListener("keypress", function(event){
 });
 
 
-
 /* -----------------------------
 FORMAT AI TEXT (Markdown → HTML)
 ----------------------------- */
@@ -28,19 +21,10 @@ FORMAT AI TEXT (Markdown → HTML)
 function formatAI(text){
 
   return text
-    // bold
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-
-    // italic
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
-
-    // bullet points
     .replace(/^\s*• (.*)$/gm, "<li>$1</li>")
-
-    // wrap bullet list
     .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
-
-    // line breaks
     .replace(/\n/g, "<br>");
 }
 
@@ -62,7 +46,6 @@ async function addMessage(text, sender){
 
   } else {
 
-    // typing animation
     let i = 0;
 
     while(i <= text.length){
@@ -116,7 +99,6 @@ async function askQuestion(){
 
   setInputsDisabled(true);
 
-  // thinking indicator
   const typing = document.createElement("div");
   typing.className="message";
   typing.id="typing";
@@ -182,17 +164,29 @@ INITIAL PROMPTS
 function setInitialPrompts(){
 
   updateSuggestions([
-    "Tell me about your design philosophy",
+    "Tell me about Proact",
     "Show me a case study",
-    "What tools do you use?",
-    "Tell me about Proact"
+    "Explain your design process",
+    "What tools do you use?"
   ]);
 
   addMessage(
-    "Hi! I'm Easha's AI assistant. Ask me about my projects, design process, or experience.",
+`Hi! I'm Easha's AI portfolio assistant 👋
+
+You can ask me about:
+• UX case studies  
+• my design process  
+• AI + UX work`,
     "bot"
   );
 
 }
 
-setInitialPrompts();
+
+/* -----------------------------
+LOAD CHAT WHEN PAGE OPENS
+----------------------------- */
+
+window.onload = () => {
+  setInitialPrompts();
+};
